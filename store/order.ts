@@ -1,8 +1,19 @@
 import { makeAutoObservable } from "mobx";
 import { TypeProducts, OrderInfoType } from "@/types";
 import { fetchStatistic } from "@/utils/helpers";
+import { Message, getRandomWithProbability } from "@/utils/helpers";
+import ProductsStore from "@/store/products";
+
+const initialStateOrder = {
+  products: {},
+  leaveAtDoor: false,
+  callOfBeforeDelivery: false,
+  amount: 0,
+};
 
 class OrderInfo {
+  isLoading: boolean = false;
+  error: string = "";
   order: OrderInfoType = {
     products: {},
     leaveAtDoor: false,
@@ -51,6 +62,38 @@ class OrderInfo {
     };
 
     return dataStatistic;
+  }
+
+  buy() {
+    return new Promise((res, rej) => {
+      const isSuccess = Boolean(getRandomWithProbability());
+
+      this.isLoading = true;
+
+      setTimeout(() => {
+        if (isSuccess) {
+          res(this.order);
+        } else {
+          rej("Ошибка при оформлении заказа");
+        }
+      }, 1000);
+    })
+      .then(() => {
+        this.clearOrder();
+
+        Message({ type: "success", text: "Заказ оформлен!" });
+      })
+      .catch((err) => Message({ type: "error", text: err }))
+      .finally(() => {
+        this.isLoading = false;
+      });
+  }
+
+  clearOrder() {
+    this.order = initialStateOrder;
+    this.isLoading = false;
+    this.error = "";
+    ProductsStore.clearProducts();
   }
 
   get getOrderInfo() {

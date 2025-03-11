@@ -6,6 +6,7 @@ import {
   getRandomWithProbability,
   generagteRandomProducts,
   fetchStatistic,
+  Message,
 } from "@/utils/helpers";
 
 class Products {
@@ -38,7 +39,9 @@ class Products {
         this.goods = [...this.goods, ...newProducts];
       })
       .catch((err) => {
-        this.error = err.message;
+        this.error = err;
+
+        Message({ type: "error", text: err });
       })
       .finally(() => {
         this.isLoading = false;
@@ -52,7 +55,9 @@ class Products {
     if (quantity && productsInBasket < quantity) {
       this.basket[id] = (this.basket[id] || 0) + 1;
     } else {
-      this.error = "Недостаточно товаров для покупки";
+      this.error = "Количество товара ограничено";
+
+      Message({ type: "info", text: "Количество товара ограничено!" });
     }
 
     const dataStatistic = this.getDataStatistic();

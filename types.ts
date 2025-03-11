@@ -13,3 +13,5 @@ export interface OrderInfoType {
   amount: number;
   products: TypeProducts;
 }
+
+export type MessageProps = { type: "success" | "error" | "info"; text: string };

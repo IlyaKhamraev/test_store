@@ -10,6 +10,7 @@ import { ProductsList } from "@/components/ui/ProductsList";
 import { Form } from "@/components/ui/Form";
 import { minAmount } from "@/utils/helpers";
 import { Colors } from "@/constants/Colors";
+import { PurchaseCondition } from "@/components/ui/PurchaseCondition";
 
 const TabTwoScreen = observer(() => {
   const getProductsBasket = ProductsStore.getProductsBasket;
@@ -56,10 +57,7 @@ const TabTwoScreen = observer(() => {
         ) : null}
 
         {isPurchaseCondition ? (
-          <Text style={styles.purchaseConditionText}>
-            Для того чтобы совершить покупку, необходимо набрать товаров на
-            сумму не менее {minAmount} руб.
-          </Text>
+          <PurchaseCondition minAmount={minAmount} />
         ) : null}
 
         <Form
@@ -94,11 +92,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginBottom: 10,
-  },
-  purchaseConditionText: {
-    marginBottom: 20,
-    fontSize: 16,
-    color: Colors.red,
   },
   addButton: {
     backgroundColor: "#098003",

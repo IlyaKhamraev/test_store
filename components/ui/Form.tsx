@@ -8,6 +8,8 @@ import { ScrollableModal } from "@/components/ui/ScrollableModal";
 import { ProductsList } from "@/components/ui/ProductsList";
 import { TypeProducts, TypeProduct } from "@/types";
 import { Button } from "@/components/ui/Button";
+import { PurchaseCondition } from "@/components/ui/PurchaseCondition";
+import { minAmount } from "@/utils/helpers";
 
 interface FormProps {
   isHasProducts: boolean;
@@ -49,6 +51,10 @@ export const Form = ({
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const buy = () => {
+    OrderStore.buy();
   };
 
   return (
@@ -112,8 +118,21 @@ export const Form = ({
             <Text style={styles.text}>Вам оставят заказ около двери.</Text>
           ) : null}
           <Text style={styles.text}>Общая сумма заказа {totalAmount} руб.</Text>
+          {isPurchaseCondition ? (
+            <View style={styles.mb10}>
+              <PurchaseCondition minAmount={minAmount} />
+            </View>
+          ) : null}
           <View style={styles.mb10}>
-            <Button text="Опалтить" onClick={toggleModal} type="secondary" />
+            <Button
+              disabled={isPurchaseCondition}
+              text="Опалтить"
+              onClick={() => {
+                OrderStore.buy();
+                toggleModal();
+              }}
+              type="secondary"
+            />
           </View>
           <View style={styles.mb10}>
             <Button text="Закрыть" onClick={toggleModal} type="danger" />

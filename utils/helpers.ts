@@ -1,4 +1,6 @@
-import { TypeProduct, OrderInfoType } from "@/types";
+import Toast from "react-native-toast-message";
+
+import { TypeProduct, OrderInfoType, MessageProps } from "@/types";
 
 export const randomId = () => Math.random().toString(16).slice(2);
 
@@ -32,9 +34,26 @@ export const generagteRandomProducts = () => {
 export const minAmount = 1000;
 
 export const fetchStatistic = (data: OrderInfoType) => {
+  const isSuccess = Boolean(getRandomWithProbability());
+
   return new Promise((res, rej) => {
     setTimeout(() => {
-      res(data);
+      if (isSuccess) {
+        res(data);
+      } else {
+        rej("Cервис недоступен");
+      }
+    }, 1500);
+  })
+    .then(() => console.log(data))
+    .catch((err) => {
+      Message({ type: "error", text: err });
     });
-  });
 };
+
+export const Message = ({ type, text }: MessageProps) =>
+  Toast.show({
+    type,
+    text1: "Внимание",
+    text2: text,
+  });
