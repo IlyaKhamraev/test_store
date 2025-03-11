@@ -64,7 +64,7 @@ class OrderInfo {
     return dataStatistic;
   }
 
-  buy() {
+  async buy() {
     return new Promise((res, rej) => {
       const isSuccess = Boolean(getRandomWithProbability());
 

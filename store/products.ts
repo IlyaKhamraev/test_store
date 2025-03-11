@@ -19,7 +19,7 @@ class Products {
     makeAutoObservable(this);
   }
 
-  fetchProducts() {
+  async fetchProducts() {
     return new Promise((resolve, reject) => {
       this.isLoading = true;
       this.error = "";
