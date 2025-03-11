@@ -14,9 +14,9 @@ export const ProductCard = observer(
   ({ product, isBasket }: ProductCardProps) => {
     const { name, price, id } = product;
 
-    const getProductsStore = ProductsStore.getProductsStore;
+    const getProductsBasket = ProductsStore.getBasket;
 
-    const productsIds = getProductsStore[id];
+    const productsIds = getProductsBasket[id];
 
     const handleAddProduct = (id: TypeProduct["id"]) => {
       ProductsStore.addProduct(id);

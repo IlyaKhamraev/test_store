@@ -1,37 +1,78 @@
 import { makeAutoObservable } from "mobx";
+
 import { TypeProduct, TypeProducts } from "@/Types/types";
+import {
+  getRandomWithProbability,
+  generagteRandomProducts,
+} from "@/utils/helpers";
 
 class Products {
-  products: TypeProducts = {};
+  goods: TypeProduct[] = [];
+  isLoading: boolean = false;
+  error: string = "";
+  basket: TypeProducts = {};
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  addProduct(id: TypeProduct["id"]) {
-    this.products[id] = (this.products[id] || 0) + 1;
+  fetchProducts() {
+    return new Promise((resolve, reject) => {
+      this.isLoading = true;
+      this.error = "";
 
-    console.log(this.products);
+      setTimeout(() => {
+        const isSuccess = Boolean(getRandomWithProbability());
+
+        if (isSuccess) {
+          resolve(true);
+        } else {
+          reject("Ошибка подгрузки товаров");
+        }
+      }, 2000);
+    })
+      .then(() => {
+        const newProducts = generagteRandomProducts();
+        this.goods = [...this.goods, ...newProducts];
+      })
+      .catch((err) => {
+        this.error = err.message;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  }
+
+  addProduct(id: TypeProduct["id"]) {
+    this.basket[id] = (this.basket[id] || 0) + 1;
   }
 
   removeProduct(id: TypeProduct["id"]) {
-    if (this.products[id]) {
-      delete this.products[id];
+    if (this.basket[id]) {
+      delete this.basket[id];
     }
   }
 
   decerementProducts(id: TypeProduct["id"]) {
-    if (this.products[id]) {
-      this.products[id]--;
+    if (this.basket[id]) {
+      this.basket[id]--;
     }
   }
 
   clearProducts(): void {
-    this.products = {};
+    this.basket = {};
   }
 
-  get getProductsStore() {
-    return this.products;
+  get getProductsBasket() {
+    const productsIds = Object.keys(this.basket);
+
+    const basketData = this.goods.filter(({ id }) => productsIds.includes(id));
+
+    return basketData;
+  }
+
+  get getBasket() {
+    return this.basket;
   }
 }
 

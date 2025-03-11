@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { observer } from "mobx-react-lite";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -7,47 +6,26 @@ import { ThemedText } from "@/components/ThemedText";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import ProductsStore from "@/store/products";
 import OrderStore from "@/store/order";
-import { products } from "@/constants/data";
 import { ProductsList } from "@/components/ui/ProductsList";
 import { Form } from "@/components/ui/Form";
-
-const minAmount = 1000;
+import { minAmount } from "@/utils/helpers";
 
 const ProfileScreen = observer(() => {
-  const getProductsStore = ProductsStore.getProductsStore;
+  const getProductsBasket = ProductsStore.getProductsBasket;
+  const getBasket = ProductsStore.getBasket;
   const getOrderStore = OrderStore.getOrderInfo;
 
-  const productsIds = Object.keys(getProductsStore);
+  const isHasProducts = Boolean(getProductsBasket.length);
 
-  const isHasProducts = Boolean(productsIds.length);
-
-  const basketData = products.filter(({ id }) =>
-    productsIds.includes(String(id))
-  );
-
-  const totalAmount = basketData.reduce((acc, { id, price }) => {
-    acc += getProductsStore[id] * price;
+  const totalAmount = getProductsBasket.reduce((acc, { id, price }) => {
+    acc += getBasket[id] * price;
     return acc;
   }, 0);
 
   const isPurchaseCondition =
-    minAmount >= totalAmount && Boolean(basketData.length);
+    minAmount >= totalAmount && Boolean(getProductsBasket.length);
 
   const foramttedAmount = `${totalAmount} руб.`;
-
-  // const handleClaerProducts = () => ProductsStore.clearProducts();
-
-  // const toggleLeaveAtDoor = () => {
-  //   OrderStore.toggleLeaveAtDoor();
-  // };
-
-  // const toggleCallOfBeforeDelivery = () => {
-  //   OrderStore.toggleCallOfBeforeDelivery();
-  // };
-
-  // const handleSubmit = () => {
-
-  // }
 
   return (
     <ParallaxScrollView
@@ -70,7 +48,7 @@ const ProfileScreen = observer(() => {
           <Text style={styles.text}>Товаров на сумму: {foramttedAmount}</Text>
         ) : null}
 
-        <ProductsList isBasket products={basketData} />
+        <ProductsList isBasket products={getProductsBasket} />
 
         {isHasProducts ? (
           <Text style={styles.text}>К оплате: {foramttedAmount}</Text>
@@ -90,48 +68,9 @@ const ProfileScreen = observer(() => {
           callOfBeforeDelivery={getOrderStore.callOfBeforeDelivery}
           isPurchaseCondition={isPurchaseCondition}
           totalAmount={totalAmount}
-          productsStore={getProductsStore}
+          productsStore={getBasket}
+          basketData={getProductsBasket}
         />
-
-        {/* <View style={{ marginBottom: 10 }}>
-          <Checkbox
-            label="Оставить товар у двери"
-            isChecked={getOrderStore.leaveAtDoor}
-            onToggle={toggleLeaveAtDoor}
-          />
-        </View>
-        <View style={{ marginBottom: 10 }}>
-          <Checkbox
-            label="Позвонить за час до доставки"
-            isChecked={getOrderStore.callOfBeforeDelivery}
-            onToggle={toggleCallOfBeforeDelivery}
-          />
-        </View>
-
-        {isHasProducts ? (
-          <TouchableOpacity
-            style={
-              isPurchaseCondition ? styles.addButtonDisabled : styles.addButton
-            }
-            onPress={() => console.log}
-            disabled={isPurchaseCondition}
-          >
-            <Text
-              style={styles.addButtonText}
-            >{`Опалтить ${foramttedAmount}`}</Text>
-          </TouchableOpacity>
-        ) : (
-          <Text style={styles.text}>Ваша корзина пуста...</Text>
-        )}
-
-        {isHasProducts ? (
-          <TouchableOpacity
-            style={styles.clearButton}
-            onPress={handleClaerProducts}
-          >
-            <Text style={styles.addButtonText}>Удалить товары</Text>
-          </TouchableOpacity>
-        ) : null} */}
       </View>
     </ParallaxScrollView>
   );
@@ -158,6 +97,7 @@ const styles = StyleSheet.create({
   purchaseConditionText: {
     marginBottom: 20,
     fontSize: 16,
+    color: "red",
   },
   addButton: {
     backgroundColor: "#098003",

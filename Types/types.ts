@@ -1,7 +1,8 @@
 export interface TypeProduct {
-  id: number;
+  id: string;
   name: string;
   price: number;
+  quantity?: number;
 }
 
 export type TypeProducts = Record<TypeProduct["id"], number>;
