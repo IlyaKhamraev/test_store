@@ -53,10 +53,6 @@ export const Form = ({
     setModalVisible(!isModalVisible);
   };
 
-  const buy = () => {
-    OrderStore.buy();
-  };
-
   return (
     <>
       {isHasProducts ? (
