@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 
 import ProductsStore from "@/store/products";
 import OrderStore from "@/store/order";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ScrollableModal } from "@/components/ui/ScrollableModal";
 import { ProductsList } from "@/components/ui/ProductsList";
-import { TypeProducts, TypeProduct } from "@/Types/types";
+import { TypeProducts, TypeProduct } from "@/types";
+import { Button } from "@/components/ui/Button";
 
 interface FormProps {
   isHasProducts: boolean;
@@ -60,14 +55,14 @@ export const Form = ({
     <>
       {isHasProducts ? (
         <>
-          <View style={{ marginBottom: 10 }}>
+          <View style={styles.mb10}>
             <Checkbox
               label="Оставить товар у двери"
               isChecked={leaveAtDoor}
               onToggle={toggleLeaveAtDoor}
             />
           </View>
-          <View style={{ marginBottom: 10 }}>
+          <View style={styles.mb10}>
             <Checkbox
               label="Позвонить за час до доставки"
               isChecked={callOfBeforeDelivery}
@@ -78,28 +73,26 @@ export const Form = ({
       ) : null}
 
       {isHasProducts ? (
-        <TouchableOpacity
-          style={
-            isPurchaseCondition ? styles.addButtonDisabled : styles.addButton
-          }
-          onPress={() => toggleModal()}
-          disabled={isPurchaseCondition}
-        >
-          <Text
-            style={styles.addButtonText}
-          >{`Опалтить ${foramttedAmount}`}</Text>
-        </TouchableOpacity>
+        <View style={styles.mb10}>
+          <Button
+            text={`Оплатить ${foramttedAmount}`}
+            onClick={() => toggleModal()}
+            type="secondary"
+            disabled={isPurchaseCondition}
+          />
+        </View>
       ) : (
         <Text style={styles.text}>Ваша корзина пуста...</Text>
       )}
 
       {isHasProducts ? (
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={handleClaerProducts}
-        >
-          <Text style={styles.addButtonText}>Удалить товары</Text>
-        </TouchableOpacity>
+        <View style={styles.mb10}>
+          <Button
+            text="Удалить товары"
+            onClick={handleClaerProducts}
+            type="danger"
+          />
+        </View>
       ) : null}
 
       <ScrollableModal
@@ -108,7 +101,7 @@ export const Form = ({
       >
         <>
           <Text style={styles.modalTitle}>Подтверждение заказа</Text>
-          <ScrollView style={{ marginBottom: 10 }}>
+          <ScrollView style={styles.mb10}>
             <ProductsList isBasket products={basketData} />
           </ScrollView>
 
@@ -119,12 +112,12 @@ export const Form = ({
             <Text style={styles.text}>Вам оставят заказ около двери.</Text>
           ) : null}
           <Text style={styles.text}>Общая сумма заказа {totalAmount} руб.</Text>
-          <TouchableOpacity onPress={toggleModal} style={styles.approveButton}>
-            <Text style={styles.buttonText}>Опалтить</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
-            <Text style={styles.buttonText}>Закрыть</Text>
-          </TouchableOpacity>
+          <View style={styles.mb10}>
+            <Button text="Опалтить" onClick={toggleModal} type="secondary" />
+          </View>
+          <View style={styles.mb10}>
+            <Button text="Закрыть" onClick={toggleModal} type="danger" />
+          </View>
         </>
       </ScrollableModal>
     </>
@@ -132,53 +125,9 @@ export const Form = ({
 };
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  container: {
-    padding: 30,
-  },
-  titleContainer: {
-    fontSize: 26,
-    marginBottom: 20,
-  },
   text: {
     fontSize: 16,
     marginBottom: 10,
-  },
-  purchaseConditionText: {
-    marginBottom: 20,
-    fontSize: 16,
-  },
-  addButton: {
-    backgroundColor: "#098003",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  addButtonDisabled: {
-    backgroundColor: "#098003",
-    opacity: 0.3,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  clearButton: {
-    backgroundColor: "#d10617",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   modalTitle: {
     fontSize: 20,
@@ -186,24 +135,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  closeButton: {
-    backgroundColor: "#FF3B30",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  approveButton: {
-    backgroundColor: "#098003",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
+  mb10: {
+    marginBottom: 10,
   },
 });
 

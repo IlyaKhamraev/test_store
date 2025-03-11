@@ -6,3 +6,10 @@ export interface TypeProduct {
 }
 
 export type TypeProducts = Record<TypeProduct["id"], number>;
+
+export interface OrderInfoType {
+  leaveAtDoor: boolean;
+  callOfBeforeDelivery: boolean;
+  amount: number;
+  products: TypeProducts;
+}

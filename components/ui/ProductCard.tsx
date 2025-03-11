@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { observer } from "mobx-react-lite";
 
-import { TypeProduct } from "@/Types/types";
+import { TypeProduct } from "@/types";
 import ProductsStore from "@/store/products";
+import { Colors } from "@/constants/Colors";
+import { Button } from "@/components/ui/Button";
 
 interface ProductCardProps {
   product: TypeProduct;
@@ -62,41 +64,39 @@ export const ProductCard = observer(
             <Text style={styles.title}>{name}</Text>
             <Text style={styles.price}>{price} руб.</Text>
           </View>
-
-          {isShowToggle ? (
-            <View style={styles.quantityContainer}>
-              <TouchableOpacity
-                style={styles.quantityButton}
-                onPress={() => handleСonditionClick(id)}
-              >
-                <Text style={styles.quantityButtonText}>-</Text>
-              </TouchableOpacity>
-              <Text style={styles.quantityText}>{productsIds}</Text>
-              <TouchableOpacity
-                onPress={() => handleAddProduct(id)}
-                style={styles.quantityButton}
-              >
-                <Text style={styles.quantityButtonText}>+</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => handleAddProduct(id)}
-            >
-              <Text style={styles.addButtonText}>Добавить</Text>
-            </TouchableOpacity>
-          )}
-
-          {isBasket ? (
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => handleRemoveProduct(id)}
-            >
-              <Text style={styles.addButtonText}>Удалить товар</Text>
-            </TouchableOpacity>
-          ) : null}
         </View>
+
+        {isShowToggle ? (
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => handleСonditionClick(id)}
+            >
+              <Text style={styles.quantityButtonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantityText}>{productsIds}</Text>
+            <TouchableOpacity
+              onPress={() => handleAddProduct(id)}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <Button
+            text="Добавить"
+            onClick={() => handleAddProduct(id)}
+            type="primary"
+          />
+        )}
+
+        {isBasket ? (
+          <Button
+            text="Удалить товар"
+            onClick={() => handleRemoveProduct(id)}
+            type="primary"
+          />
+        ) : null}
       </View>
     );
   }
@@ -104,17 +104,17 @@ export const ProductCard = observer(
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 15,
     margin: 10,
-    shadowColor: "#000",
+    shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
   },
   imageBox: {
@@ -142,13 +142,13 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     color: "#888",
-    marginTop: 5,
+    marginBottom: 5,
   },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 15,
+    marginBottom: 10,
   },
   quantityButton: {
     backgroundColor: "#f0f0f0",
@@ -165,16 +165,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
-  addButton: {
-    backgroundColor: "#007bff",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 15,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+  mb10: {
+    marginBottom: 10,
   },
 });

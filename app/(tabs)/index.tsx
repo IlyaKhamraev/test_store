@@ -36,8 +36,6 @@ const HomeScreen = observer(() => {
     );
   };
 
-  console.log(products);
-
   return (
     <View style={styles.container}>
       <ThemedText style={styles.titleContainer} type="title">

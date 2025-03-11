@@ -1,9 +1,11 @@
 import { makeAutoObservable } from "mobx";
+import OrderInfo from "@/store/order";
 
-import { TypeProduct, TypeProducts } from "@/Types/types";
+import { TypeProduct, TypeProducts, OrderInfoType } from "@/types";
 import {
   getRandomWithProbability,
   generagteRandomProducts,
+  fetchStatistic,
 } from "@/utils/helpers";
 
 class Products {
@@ -52,22 +54,45 @@ class Products {
     } else {
       this.error = "Недостаточно товаров для покупки";
     }
+
+    const dataStatistic = this.getDataStatistic();
+
+    fetchStatistic(dataStatistic);
   }
 
   removeProduct(id: TypeProduct["id"]) {
     if (this.basket[id]) {
       delete this.basket[id];
     }
+
+    const dataStatistic = this.getDataStatistic();
+
+    fetchStatistic(dataStatistic);
   }
 
   decerementProducts(id: TypeProduct["id"]) {
     if (this.basket[id]) {
       this.basket[id]--;
     }
+
+    const dataStatistic = this.getDataStatistic();
+
+    fetchStatistic(dataStatistic);
   }
 
   clearProducts(): void {
     this.basket = {};
+  }
+
+  getDataStatistic() {
+    const dataStatistic: OrderInfoType = {
+      products: OrderInfo.getOrderInfo.products,
+      leaveAtDoor: OrderInfo.getOrderInfo.leaveAtDoor,
+      callOfBeforeDelivery: OrderInfo.getOrderInfo.callOfBeforeDelivery,
+      amount: OrderInfo.getOrderInfo.amount,
+    };
+
+    return dataStatistic;
   }
 
   get getProductsBasket() {

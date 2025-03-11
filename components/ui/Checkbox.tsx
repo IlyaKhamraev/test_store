@@ -1,21 +1,21 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
+import { Colors } from "@/constants/Colors";
+
 interface CheckboxProps {
   label: string;
   isChecked: boolean;
   onToggle: () => void;
 }
 
-export const Checkbox = ({ label, isChecked, onToggle }: CheckboxProps) => {
-  return (
-    <TouchableOpacity onPress={onToggle} style={styles.checkboxContainer}>
-      <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
-        {isChecked && <Text style={styles.checkmark}>✓</Text>}
-      </View>
-      <Text style={styles.label}>{label}</Text>
-    </TouchableOpacity>
-  );
-};
+export const Checkbox = ({ label, isChecked, onToggle }: CheckboxProps) => (
+  <TouchableOpacity onPress={onToggle} style={styles.checkboxContainer}>
+    <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
+      {isChecked && <Text style={styles.checkmark}>✓</Text>}
+    </View>
+    <Text style={styles.label}>{label}</Text>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderWidth: 2,
-    borderColor: "#000",
+    borderColor: Colors.black,
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderColor: "#007BFF",
   },
   checkmark: {
-    color: "#FFF",
+    color: Colors.white,
     fontSize: 16,
   },
   label: {

@@ -1,4 +1,4 @@
-import { TypeProduct } from "@/Types/types";
+import { TypeProduct, OrderInfoType } from "@/types";
 
 export const randomId = () => Math.random().toString(16).slice(2);
 
@@ -30,3 +30,11 @@ export const generagteRandomProducts = () => {
 };
 
 export const minAmount = 1000;
+
+export const fetchStatistic = (data: OrderInfoType) => {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res(data);
+    });
+  });
+};

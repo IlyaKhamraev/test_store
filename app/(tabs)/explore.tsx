@@ -9,6 +9,7 @@ import OrderStore from "@/store/order";
 import { ProductsList } from "@/components/ui/ProductsList";
 import { Form } from "@/components/ui/Form";
 import { minAmount } from "@/utils/helpers";
+import { Colors } from "@/constants/Colors";
 
 const TabTwoScreen = observer(() => {
   const getProductsBasket = ProductsStore.getProductsBasket;
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   purchaseConditionText: {
     marginBottom: 20,
     fontSize: 16,
-    color: "red",
+    color: Colors.red,
   },
   addButton: {
     backgroundColor: "#098003",
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   addButtonText: {
-    color: "#fff",
+    color: Colors.white,
     fontSize: 16,
     fontWeight: "bold",
   },
