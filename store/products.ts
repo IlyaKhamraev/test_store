@@ -44,7 +44,14 @@ class Products {
   }
 
   addProduct(id: TypeProduct["id"]) {
-    this.basket[id] = (this.basket[id] || 0) + 1;
+    const quantity = this.goods.find((product) => product.id === id)?.quantity;
+    const productsInBasket = this.basket[id] || 0;
+
+    if (quantity && productsInBasket < quantity) {
+      this.basket[id] = (this.basket[id] || 0) + 1;
+    } else {
+      this.error = "Недостаточно товаров для покупки";
+    }
   }
 
   removeProduct(id: TypeProduct["id"]) {

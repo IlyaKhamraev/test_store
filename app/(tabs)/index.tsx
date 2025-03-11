@@ -1,36 +1,83 @@
-import { Image, StyleSheet } from "react-native";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { ProductCard } from "@/components/ui/ProductCard";
+import ProductsStore from "@/store/products";
 
-export default function HomeScreen() {
+const HomeScreen = observer(() => {
+  useEffect(() => {
+    ProductsStore.fetchProducts();
+  }, []);
+
+  const isLoading = ProductsStore.isLoading;
+  const products = ProductsStore.goods;
+
+  const handleLoadMore = () => {
+    if (!isLoading) {
+      ProductsStore.fetchProducts();
+    }
+  };
+
+  const renderFooter = () => {
+    if (!isLoading) return null;
+
+    return (
+      <View style={styles.footer}>
+        <ActivityIndicator size="large" color="#007BFF" />
+      </View>
+    );
+  };
+
+  console.log(products);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    ></ParallaxScrollView>
+    <View style={styles.container}>
+      <ThemedText style={styles.titleContainer} type="title">
+        Товары
+      </ThemedText>
+
+      {isLoading ? <Text>Загрузка товаров...</Text> : null}
+
+      <FlatList
+        data={products}
+        renderItem={({ item }) => <ProductCard product={item} />}
+        keyExtractor={({ id }) => id}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+      />
+    </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+  container: {
+    padding: 30,
+    paddingBottom: 150,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  headerImage: {
+    color: "#808080",
+    bottom: -90,
+    left: -35,
     position: "absolute",
   },
+  titleContainer: {
+    fontSize: 26,
+    marginBottom: 20,
+  },
+  footer: {
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
+
+export default HomeScreen;
